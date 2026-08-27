@@ -1,0 +1,6 @@
+__pycache__/
+.venv/
+*.pyc
+.DS_Store
+data/facets_enriched.csv
+data/benchmark_results.json

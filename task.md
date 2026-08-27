@@ -1,0 +1,41 @@
+# Task List - Scalable Conversation Facet Evaluator
+
+- [x] **Step 1: Preprocessing & Audit System (`src/audit.py`)**
+  - [x] Write classification rules for `observability_level` (direct, indirect, not_observable), `facet_type`, and `rule_confidence`
+  - [x] Normalize facet strings (strip index prefixes, trailing colons)
+  - [x] Run audit to generate `data/facets_enriched.csv` from `Facets Assignment.csv`
+  - [x] Review generated `facets_enriched.csv` manually to ensure high-quality taxonomy classification
+- [x] **Step 2: Config and Dependencies Setup (`src/config.py`, `requirements.txt`)**
+  - [x] Write `requirements.txt` with necessary packages (`pandas`, `sentence-transformers`, `huggingface_hub`, `pydantic`)
+  - [x] Write `src/config.py` for global environment config (backend type, API credentials, retries, timeout)
+- [x] **Step 3: Database & Hybrid Retrieval (`src/database.py`)**
+  - [x] Load enriched facets and index observable ones using `sentence-transformers/all-MiniLM-L6-v2`
+  - [x] Implement cosine similarity search
+  - [x] Implement keyword matching and candidate expansion
+  - [x] Implement Normal Mode (retrieve top-K) and Explicit Mode routing
+- [x] **Step 4: Policy Abstention Engine (`src/policy.py`)**
+  - [x] Implement deterministic policy abstention for `not_observable` facets
+  - [x] Map policy output confidence directly to audit `rule_confidence`
+- [x] **Step 5: LLM Scoring Client & Parser (`src/scoring.py`)**
+  - [x] Implement client backends (Hugging Face serverless, OpenAI-compatible, local fallback)
+  - [x] Add timeout and retry logic with backoff
+  - [x] Write structured prompt template for 1-5 scoring and explicit abstentions
+  - [x] Write strict schema validation and recovery regex parser
+- [x] **Step 6: Benchmark Dataset & Evaluation Suite (`src/benchmark.py`)**
+  - [x] Formulate 10 distinct conversation snippets covering sarcasm, code-switching, contradictions, and quotes
+  - [x] Formulate 20 representative reference facets (10 observable, 10 non-observable)
+  - [x] Formulate ground-truth relevance/scoring matrix
+  - [x] Implement metrics computer (Recall@K, Policy Accuracy, Score Agreement, Abstention Accuracy)
+- [x] **Step 7: Master Orchestrator CLI (`run_pipeline.py`)**
+  - [x] Create CLI that runs the pipeline stages end-to-end
+  - [x] Log tabular metric reports and evaluation logs cleanly
+- [x] **Step 8: Automated Verification (`tests/`)**
+  - [x] Write `tests/test_audit.py` to check classification rules
+  - [x] Write `tests/test_retrieval.py` to check hybrid search accuracy
+  - [x] Write `tests/test_parser.py` to check JSON parsing & schema constraints
+  - [x] Run pytest to verify all test suites pass
+- [x] **Step 9: Submission Documentation**
+  - [x] Document final architecture, setup, and 5,000-facet scaling in `README.md`
+  - [x] Document 3 non-trivial trade-offs in `DECISIONS.md`
+  - [x] Document 2 real debugging stories in `DEBUGGING.md`
+  - [x] Document AI interaction logs in `PROMPT_LOG.md`
