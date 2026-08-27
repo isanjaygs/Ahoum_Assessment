@@ -1,3 +1,4 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
 ==========================================================
       SCALABLE CONVERSATION FACET EVALUATOR PIPELINE       
 ==========================================================
@@ -23,10 +24,17 @@ facet_type
 personality_trait           247
 medical_physiological        38
 malformed_header             30
-daily_habit_activity         27
 spiritual_religious          27
+daily_habit_activity         27
 cognitive_skill              21
 biographical_demographic      9
+Name: count, dtype: int64
+
+--- Sensitivity Stats ---
+sensitivity
+low       379
+high       10
+medium     10
 Name: count, dtype: int64
 
 --- Needs Review Stats ---
@@ -44,7 +52,7 @@ Name: count, dtype: int64
 Test Case 1: Clear risk-taking & adventure case
 Conversation: "I quit my stable corporate job last week and bought a one-way ticket to Colombia with no plans or place to stay. Let's see what happens!"
 Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
-Loading weights: 100%|██████████| 103/103 [00:00<00:00, 7428.78it/s]
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|██████████| 103/103 [00:00<00:00, 7428.78it/s]
 Precomputing embeddings for 272 observable facets...
 [API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
 [API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
@@ -151,7 +159,7 @@ Conversation: "So, did you see the weather forecast for tomorrow? They said it m
 Total Conversations Evaluated      : 10
 Global Retrieval Recall@10         : 17/17 (100.0%)
 Global Policy Abstention Accuracy  : 8/8 (100.0%)
-Global LLM Scoring/Abstain Accuracy: 0/18 (0.0% due to API key missing)
+Global LLM Scoring/Abstain Accuracy: 0/18 (0.0%)
 Benchmark results saved to         : /Users/sanjaygs/Documents/Study/Projects/Ahoum/data/benchmark_results.json
 ==================================================
 
