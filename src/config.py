@@ -1,8 +1,8 @@
 import os
 
 # global configuration options
-LLM_PROVIDER = os.getenv("LLM_PROVIDER", "huggingface").lower()
-LLM_MODEL = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-7B-Instruct")
+LLM_PROVIDER = os.getenv("LLM_PROVIDER", "local").lower()
+LLM_MODEL = os.getenv("LLM_MODEL", "Qwen/Qwen2.5-1.5B-Instruct")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
 
