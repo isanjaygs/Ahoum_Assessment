@@ -1,0 +1,158 @@
+==========================================================
+      SCALABLE CONVERSATION FACET EVALUATOR PIPELINE       
+==========================================================
+
+--- Environment Config ---
+LLM Provider    : huggingface
+LLM Model       : Qwen/Qwen2.5-7B-Instruct
+Timeout / Retry : 15.0s / 2 retries
+Data Dir        : /Users/sanjaygs/Documents/Study/Projects/Ahoum/data
+
+>>> Executing Preprocessing & Audit Stage...
+Audited 399 facets. Enriched file saved to /Users/sanjaygs/Documents/Study/Projects/Ahoum/data/facets_enriched.csv
+
+--- Observability Stats ---
+observability_level
+indirect          261
+not_observable    127
+direct             11
+Name: count, dtype: int64
+
+--- Facet Type Stats ---
+facet_type
+personality_trait           247
+medical_physiological        38
+malformed_header             30
+daily_habit_activity         27
+spiritual_religious          27
+cognitive_skill              21
+biographical_demographic      9
+Name: count, dtype: int64
+
+--- Needs Review Stats ---
+needs_review
+False    364
+True      35
+Name: count, dtype: int64
+
+>>> Executing Evaluation Benchmark Stage...
+
+==================================================
+      RUNNING SCORING BASELINE BENCHMARK          
+==================================================
+
+Test Case 1: Clear risk-taking & adventure case
+Conversation: "I quit my stable corporate job last week and bought a one-way ticket to Colombia with no plans or place to stay. Let's see what happens!"
+Loading embedding model: sentence-transformers/all-MiniLM-L6-v2...
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 7428.78it/s]
+Precomputing embeddings for 272 observable facets...
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 3/3 (100.0%)
+ -> No policy facets to evaluate
+ -> Scoring Accuracy: 0/3 correct
+--------------------------------------------------
+Test Case 2: Sarcasm / irony analysis
+Conversation: "Oh, fantastic. I absolutely love sitting in gridlock traffic for two hours every single day, it is literally my dream job commute."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 2/2 (100.0%)
+ -> No policy facets to evaluate
+ -> Scoring Accuracy: 0/2 correct
+--------------------------------------------------
+Test Case 3: Code-switching & perseverance
+Conversation: "Honestly, me siento muy cansado today. I didn't sleep well at all, but we still have to finish this project. Vamos a darle."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 3/3 (100.0%)
+ -> No policy facets to evaluate
+ -> Scoring Accuracy: 0/3 correct
+--------------------------------------------------
+Test Case 4: Quoted/Third-party speech (avoiding wrong inference)
+Conversation: "My boss literally stood up in the meeting and yelled, 'You are all completely incompetent and lazy!' It was crazy."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 2/2 (100.0%)
+ -> No policy facets to evaluate
+ -> Scoring Accuracy: 0/2 correct
+--------------------------------------------------
+Test Case 5: Ambiguity / double negatives
+Conversation: "I wouldn't say I'm not open to new ideas, but I'm certainly not going to just jump into anything without checking the facts first."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 2/2 (100.0%)
+ -> No policy facets to evaluate
+ -> Scoring Accuracy: 0/2 correct
+--------------------------------------------------
+Test Case 6: Sarcastic compliance / unassertiveness
+Conversation: "Sure, let's keep talking over me. I'm sure my input is completely worthless anyway."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 2/2 (100.0%)
+ -> No policy facets to evaluate
+ -> Scoring Accuracy: 0/2 correct
+--------------------------------------------------
+Test Case 7: Hallucination Test - Tiredness (Medical)
+Conversation: "I've been feeling extremely fatigued and sluggish for the past few weeks, waking up multiple times during the night."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 1/1 (100.0%)
+ -> Policy Abstention Accuracy: 3/3 correct
+ -> Scoring Accuracy: 0/1 correct
+--------------------------------------------------
+Test Case 8: Hallucination Test - Pasta (Biographical)
+Conversation: "I absolutely love cooking. I make a huge batch of fresh pasta from scratch almost every single Sunday evening."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 0/0 (100.0%)
+ -> Policy Abstention Accuracy: 2/2 correct
+ -> No scoring facets to evaluate
+--------------------------------------------------
+Test Case 9: Hallucination Test - Mindfulness (Habits)
+Conversation: "Lately I've been trying to live a much more mindful, peaceful life, and really focus on being present in each moment."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 1/1 (100.0%)
+ -> Policy Abstention Accuracy: 2/2 correct
+ -> Scoring Accuracy: 0/1 correct
+--------------------------------------------------
+Test Case 10: Low evidence general chitchat
+Conversation: "So, did you see the weather forecast for tomorrow? They said it might rain in the afternoon."
+[API Attempt 1 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 2.0s...
+[API Attempt 2 Failed]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Retrying in 4.0s...
+[API Call Failed after 3 attempts]: You must provide an api_key to work with auto API or log in with `hf auth login`.
+[API Execution Failure]: You must provide an api_key to work with auto API or log in with `hf auth login`.. Returning safe invalid_model_output defaults.
+ -> Retrieval Recall@10: 1/1 (100.0%)
+ -> Policy Abstention Accuracy: 1/1 correct
+ -> Scoring Accuracy: 0/2 correct
+--------------------------------------------------
+
+==================================================
+                BENCHMARK SUMMARY                 
+==================================================
+Total Conversations Evaluated      : 10
+Global Retrieval Recall@10         : 17/17 (100.0%)
+Global Policy Abstention Accuracy  : 8/8 (100.0%)
+Global LLM Scoring/Abstain Accuracy: 0/18 (0.0% due to API key missing)
+Benchmark results saved to         : /Users/sanjaygs/Documents/Study/Projects/Ahoum/data/benchmark_results.json
+==================================================
+
+Pipeline Execution Finished.
