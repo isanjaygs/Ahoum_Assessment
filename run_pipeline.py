@@ -1,6 +1,8 @@
 import argparse
 import sys
 import os
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["TOKENIZERS_PARALLELISM"]  = "false"
 from src import config
 from src.audit import audit_facets_pipeline
 from src.benchmark import run_benchmark
@@ -22,16 +24,13 @@ def main():
     
     args = parser.parse_args()
     
-    print("==========================================================")
-    print("      SCALABLE CONVERSATION FACET EVALUATOR PIPELINE       ")
-    print("==========================================================\n")
-    
-    # Verify environment
-    print("--- Environment Config ---")
-    print(f"LLM Provider    : {config.LLM_PROVIDER}")
-    print(f"LLM Model       : {config.LLM_MODEL}")
-    print(f"Timeout / Retry : {config.LLM_TIMEOUT}s / {config.LLM_MAX_RETRIES} retries")
-    print(f"Data Dir        : {config.DATA_DIR}\n")
+    print()
+    print("  ┌───────────────────────────────────────────────┐")
+    print("  │   SCALABLE CONVERSATION FACET EVALUATOR       │")
+    print("  └───────────────────────────────────────────────┘")
+    print(f"  Provider : {config.LLM_PROVIDER}  │  Model : {config.LLM_MODEL}")
+    print(f"  Timeout  : {config.LLM_TIMEOUT}s  │  Retries : {config.LLM_MAX_RETRIES}")
+    print()
     
     if args.audit_only:
         print(">>> Executing Audit Preprocessing Stage Only...\n")

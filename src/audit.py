@@ -295,17 +295,25 @@ def audit_facets_pipeline(input_csv_path: str, output_csv_path: str):
     enriched_df = pd.DataFrame(enriched_rows)
     os.makedirs(os.path.dirname(output_csv_path), exist_ok=True)
     enriched_df.to_csv(output_csv_path, index=False)
-    print(f"Audited {len(enriched_df)} facets. Enriched file saved to {output_csv_path}")
-    
-    # Print clean stats summary
-    print("\n--- Observability Stats ---")
-    print(enriched_df['observability_level'].value_counts())
-    print("\n--- Facet Type Stats ---")
-    print(enriched_df['facet_type'].value_counts())
-    print("\n--- Sensitivity Stats ---")
-    print(enriched_df['sensitivity'].value_counts())
-    print("\n--- Needs Review Stats ---")
-    print(enriched_df['needs_review'].value_counts())
+    obs   = enriched_df['observability_level'].value_counts()
+    ftype = enriched_df['facet_type'].value_counts()
+    sens  = enriched_df['sensitivity'].value_counts()
+    nr    = enriched_df['needs_review'].value_counts()
+
+    print(f"\n  ✓ Audited {len(enriched_df)} facets → {output_csv_path}\n")
+    print("  Observability          Facet Type                    Sensitivity   Review")
+    print("  ─────────────────────  ────────────────────────────  ────────────  ──────")
+    rows = max(len(obs), len(ftype), len(sens), 2)
+    obs_items   = list(obs.items())
+    ftype_items = list(ftype.items())
+    sens_items  = list(sens.items())
+    nr_items    = [("needs review", nr.get(True, 0)), ("confident",    nr.get(False, 0))]
+    for i in range(rows):
+        o  = f"{obs_items[i][0]:12} {obs_items[i][1]:3}"   if i < len(obs_items)   else ""
+        ft = f"{ftype_items[i][0]:26} {ftype_items[i][1]:3}" if i < len(ftype_items) else ""
+        s  = f"{sens_items[i][0]:8} {sens_items[i][1]:3}"  if i < len(sens_items)  else ""
+        nr_= f"{nr_items[i][0]:12} {nr_items[i][1]:3}"     if i < len(nr_items)    else ""
+        print(f"  {o:<23}  {ft:<30}  {s:<14}  {nr_}")
 
 if __name__ == '__main__':
     input_path = '/Users/sanjaygs/Documents/Study/Projects/Ahoum/Facets Assignment.csv'

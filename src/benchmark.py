@@ -162,9 +162,9 @@ def run_scoring_pipeline(convo_text: str, target_facets: list[str], db: FacetDat
     return policy_results + llm_results
 
 def run_benchmark():
-    print("==================================================")
-    print("      RUNNING SCORING BASELINE BENCHMARK          ")
-    print("==================================================\n")
+    print("\n  ┌─────────────────────────────────────────────┐")
+    print(  "  │        SCORING BASELINE BENCHMARK           │")
+    print(  "  └─────────────────────────────────────────────┘\n")
     
     db = FacetDatabase()
     
@@ -186,8 +186,9 @@ def run_benchmark():
         expected_retrieved = case["expected_observable_retrieved"]
         expected_scores = case["expected_scores"]
         
-        print(f"Test Case {convo_id}: {desc}")
-        print(f"Conversation: \"{convo_text}\"")
+        snippet = convo_text[:72] + "..." if len(convo_text) > 72 else convo_text
+        print(f"  [{convo_id:02d}] {desc}")
+        print(f"       {snippet}")
         
         # 1. Evaluate Retrieval (Recall@K)
         # In normal mode, we would retrieve top-K. Let's run retrieval to check if the 
@@ -255,10 +256,12 @@ def run_benchmark():
                 "is_correct": is_correct
             })
             
-        print(f" -> Retrieval Recall@10: {case_retrieved}/{case_expected_retrieved} ({recall_pct:.1f}%)")
-        print(f" -> Policy Abstention Accuracy: {case_policy_correct}/{case_policy_total} correct" if case_policy_total > 0 else " -> No policy facets to evaluate")
-        print(f" -> Scoring Accuracy: {case_score_correct}/{case_score_total} correct" if case_score_total > 0 else " -> No scoring facets to evaluate")
-        print("-" * 50)
+        r_icon = "✓" if case_retrieved == case_expected_retrieved else "✗"
+        p_str  = f"{case_policy_correct}/{case_policy_total} policy" if case_policy_total > 0 else ""
+        s_str  = f"{case_score_correct}/{case_score_total} scored"   if case_score_total  > 0 else ""
+        parts  = [x for x in [p_str, s_str] if x]
+        print(f"       {r_icon} Retrieval {case_retrieved}/{case_expected_retrieved}  │  " + "  │  ".join(parts))
+        print()
         
         results.append({
             "convo_id": convo_id,
@@ -279,15 +282,22 @@ def run_benchmark():
     with open(report_path, "w") as f:
         json.dump(results, f, indent=2)
         
-    print("\n==================================================")
-    print("                BENCHMARK SUMMARY                 ")
-    print("==================================================")
-    print(f"Total Conversations Evaluated      : {len(BENCHMARK_DATA)}")
-    print(f"Global Retrieval Recall@10         : {total_actual_retrieved}/{total_expected_retrieved} ({global_recall:.1f}%)")
-    print(f"Global Policy Abstention Accuracy  : {total_policy_correct}/{total_policy_evaluated} ({global_policy_acc:.1f}%)")
-    print(f"Global LLM Scoring/Abstain Accuracy: {total_scoring_correct}/{total_scoring_evaluated} ({global_scoring_acc:.1f}%)")
-    print(f"Benchmark results saved to         : {report_path}")
-    print("==================================================\n")
+    def _bar(correct, total):
+        if total == 0: return "n/a"
+        pct = correct / total * 100
+        filled = int(pct / 10)
+        bar = "█" * filled + "░" * (10 - filled)
+        return f"{bar} {correct}/{total} ({pct:.0f}%)"
+
+    print("  ┌──────────────────────────────────────────────────────────┐")
+    print(  "  │                   BENCHMARK SUMMARY                     │")
+    print(  "  ├──────────────────────────────────────────────────────────┤")
+    print(f"  │  Conversations        {len(BENCHMARK_DATA):<36}│")
+    print(f"  │  Retrieval Recall@10  {_bar(total_actual_retrieved, total_expected_retrieved):<36}│")
+    print(f"  │  Policy Abstentions   {_bar(total_policy_correct, total_policy_evaluated):<36}│")
+    print(f"  │  LLM Scoring          {_bar(total_scoring_correct, total_scoring_evaluated):<36}│")
+    print(  "  └──────────────────────────────────────────────────────────┘")
+    print(f"  Results → {report_path}\n")
 
 if __name__ == '__main__':
     run_benchmark()

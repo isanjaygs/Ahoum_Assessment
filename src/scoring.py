@@ -31,7 +31,7 @@ def _get_local_pipeline():
         "text-generation", 
         model=model, 
         tokenizer=tokenizer,
-        max_new_tokens=1500,
+        max_new_tokens=512,
         temperature=0.1,
         do_sample=False
     )
@@ -117,11 +117,11 @@ def request_llm_scoring(messages: list, retries: int = config.LLM_MAX_RETRIES, t
         except Exception as e:
             last_err = e
             if attempt < retries:
-                print(f"[API Attempt {attempt+1} Failed]: {e}. Retrying in {delay}s...")
+                print(f"  [retry {attempt+1}/{retries}] {type(last_err).__name__}. Waiting {delay:.0f}s...")
                 time.sleep(delay)
                 delay *= 2
             else:
-                print(f"[API Call Failed after {retries+1} attempts]: {e}")
+                print(f"  [failed] {str(last_err).splitlines()[0][:100]}")
                 
     raise last_err
 
@@ -283,7 +283,7 @@ def score_observable_facets(convo_text: str, candidates: list[dict]) -> list[dic
         raw_output = request_llm_scoring(messages)
     except Exception as e:
         # Graceful API failure handling: return fallback abstentions for all candidates
-        print(f"[API Execution Failure]: {e}. Returning safe invalid_model_output defaults.")
+        print(f"  [api error] Returning abstention defaults for all {len(candidates)} facets.")
         return [
             {
                 'facet': c['normalized_facet'],
